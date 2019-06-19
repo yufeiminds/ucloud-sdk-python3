@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>ucloud.services.uhost.client &#8212; ucloud-sdk-python3  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for ucloud.services.uhost.client</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">from</span> <span class="nn">ucloud.core.client</span> <span class="k">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">ucloud.services.uhost.schemas</span> <span class="k">import</span> <span class="n">apis</span>
+
+
+<div class="viewcode-block" id="UHostClient"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient">[docs]</a><span class="k">class</span> <span class="nc">UHostClient</span><span class="p">(</span><span class="n">Client</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">middleware</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UHostClient</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">transport</span><span class="p">,</span> <span class="n">middleware</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UHostClient.stop_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.stop_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">stop_uhost_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; StopUHostInstance - 指停止处于运行状态的UHost实例，需指定数据中心及UhostID。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">StopUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;StopUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">StopUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.upgrade_to_ark_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.upgrade_to_ark_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">upgrade_to_ark_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; UpgradeToArkUHostInstance - 普通升级为方舟机型</span>
+
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostIds: (Required) UHost主机的资源ID，例如UHostIds.0代表希望升级的主机1，UHostIds.1代表主机2。</span>
+<span class="sd">        :param Zone: (Required) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param CouponId: (Optional) 代金券ID 请参考DescribeCoupon接口</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">UpgradeToArkUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;UpgradeToArkUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">UpgradeToArkUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.copy_custom_image"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.copy_custom_image">[docs]</a>    <span class="k">def</span> <span class="nf">copy_custom_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; CopyCustomImage - 复制自制镜像</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param SourceImageId: (Required) 源镜像Id, 参见 DescribeImage</span>
+<span class="sd">        :param TargetProjectId: (Required) 目标项目Id, 参见 GetProjectList</span>
+<span class="sd">        :param TargetImageDescription: (Optional) 目标镜像描述</span>
+<span class="sd">        :param TargetImageName: (Optional) 目标镜像名称</span>
+<span class="sd">        :param TargetRegion: (Optional) 目标地域，不跨地域不用填</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">CopyCustomImageRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># build options</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;max_retries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># ignore retry when api is not idempotent</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;CopyCustomImage&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">CopyCustomImageResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.describe_image"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.describe_image">[docs]</a>    <span class="k">def</span> <span class="nf">describe_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; DescribeImage - 获取指定数据中心镜像列表，用户可通过指定操作系统类型，镜像Id进行过滤。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param ImageId: (Optional) 镜像Id</span>
+<span class="sd">        :param ImageType: (Optional) 镜像类型。标准镜像：Base，镜像市场：Business， 自定义镜像：Custom，默认返回所有类型</span>
+<span class="sd">        :param Limit: (Optional) 返回数据长度，默认为20</span>
+<span class="sd">        :param Offset: (Optional) 列表起始位置偏移量，默认为0</span>
+<span class="sd">        :param OsType: (Optional) 操作系统类型：Linux， Windows 默认返回所有类型</span>
+<span class="sd">        :param PriceSet: (Optional) 是否返回价格：1返回，0不返回；默认不返回</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeImageRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;DescribeImage&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeImageResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.get_uhost_instance_price"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.get_uhost_instance_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_uhost_instance_price</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; GetUHostInstancePrice - 根据UHost实例配置，获取UHost实例的价格。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param CPU: (Required) 虚拟CPU核数。可选参数：1-32（可选范围与UHostType相关）。默认值: 4</span>
+<span class="sd">        :param Count: (Required) 【未启用】购买台数，范围[1,5]</span>
+<span class="sd">        :param ImageId: (Required) 镜像Id，可通过 [DescribeImage](describe_image.html) 获取镜像ID</span>
+<span class="sd">        :param Memory: (Required) 内存大小。单位：MB。范围 ：[1024, 262144]，取值为1024的倍数（可选范围与UHostType相关）。默认值：8192</span>
+<span class="sd">        :param ChargeType: (Optional) 计费模式。枚举值为： \\ &gt; Year，按年付费； \\ &gt; Month，按月付费；\\ &gt; Dynamic，按小时付费 \\ 默认为月付。</span>
+<span class="sd">        :param DiskSpace: (Optional) 【待废弃】数据盘大小，单位: GB，范围[0,1000]，步长: 10，默认值: 0</span>
+<span class="sd">        :param Disks: (Optional) Disks</span>
+<span class="sd">        :param GPU: (Optional) GPU卡核心数。仅GPU机型支持此字段（可选范围与UHostType相关）。</span>
+<span class="sd">        :param GpuType: (Optional) GPU类型，枚举值[&quot;K80&quot;, &quot;P40&quot;, &quot;V100&quot;]</span>
+<span class="sd">        :param LifeCycle: (Optional) 【未支持】1：普通云主机；2：抢占性云主机；默认普通</span>
+<span class="sd">        :param MachineType: (Optional) 云主机类型，枚举值[&quot;N&quot;, &quot;C&quot;, &quot;G&quot;, &quot;O&quot;]</span>
+<span class="sd">        :param NetCapability: (Optional) 网络增强。枚举值：Normal，不开启; Super，开启网络增强1.0; Ultra，开启网络增强2.0； 默认值为Normal。Normal和Ultra不计费。</span>
+<span class="sd">        :param Quantity: (Optional) 购买时长。默认: 1。按小时购买(Dynamic)时无需此参数。 月付时，此参数传0，代表了购买至月末。</span>
+<span class="sd">        :param StorageType: (Optional) 【待废弃】磁盘类型，同时设定系统盘和数据盘， 枚举值为：LocalDisk，本地磁盘; UDisk，云硬盘; 默认为LocalDisk 仅部分可用区支持云硬盘方式的主机存储方式，具体请查询控制台。</span>
+<span class="sd">        :param TimemachineFeature: (Optional) 【待废弃】方舟机型。No，Yes。默认是No。</span>
+<span class="sd">        :param UHostType: (Optional) 云主机机型。参考[[api:uhost-api:uhost_type|云主机机型说明]]。</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostInstancePriceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;GetUHostInstancePrice&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostInstancePriceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.reboot_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.reboot_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">reboot_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; RebootUHostInstance - 重新启动UHost实例，需要指定数据中心及UHostID两个参数的值。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param DiskPassword: (Optional) 加密盘密码</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">RebootUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;RebootUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">RebootUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.resize_attached_disk"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.resize_attached_disk">[docs]</a>    <span class="k">def</span> <span class="nf">resize_attached_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ResizeAttachedDisk - 修改挂载的磁盘大小，包含系统盘和数据盘</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param DiskId: (Required) 磁盘ID。参见 [DescribeUHostInstance](describe_uhost_instance.html)返回值中的DiskSet。</span>
+<span class="sd">        :param DiskSpace: (Required) 磁盘大小，单位GB，步长为10。取值范围需大于当前磁盘大小，最大值请参考[[api:uhost-api:disk_type|磁盘类型]]。</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID。 参见 [DescribeUHostInstance](describe_uhost_instance.html)。</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResizeAttachedDiskRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ResizeAttachedDisk&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResizeAttachedDiskResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.resize_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.resize_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">resize_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ResizeUHostInstance - 修改指定UHost实例的资源配置，如CPU核心数，内存容量大小，网络增强等。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param BootDiskSpace: (Optional) 【待废弃】系统盘大小，单位：GB，范围[20,100]，步长：10，系统盘不支持缩容，因此不允许输入比当前实例系统盘小的值</span>
+<span class="sd">        :param CPU: (Optional) 虚拟CPU核数。可选参数：1-32（可选范围与UHostType相关）。默认值为当前实例的CPU核数</span>
+<span class="sd">        :param DiskSpace: (Optional) 【待废弃】数据盘大小，单位：GB，范围[10,1000]； SSD机型，单位：GB，范围[100,500]；步长：10，默认值为当前实例的数据盘大小，数据盘不支持缩容，因此不允许输入比当前实例数据盘大小的值</span>
+<span class="sd">        :param Memory: (Optional) 内存大小。单位：MB。范围 ：[1024, 262144]，取值为1024的倍数（可选范围与UHostType相关）。默认值为当前实例的内存大小。</span>
+<span class="sd">        :param NetCapValue: (Optional) 网卡升降级（1，表示升级，2表示降级，0表示不变）</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResizeUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ResizeUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResizeUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.describe_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.describe_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">describe_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; DescribeUHostInstance - 获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param IsolationGroup: (Optional) 硬件隔离组id。通过硬件隔离组筛选主机。</span>
+<span class="sd">        :param LifeCycle: (Optional) 1：普通云主机；2：抢占型云主机；如不传此参数，默认全部获取</span>
+<span class="sd">        :param Limit: (Optional) 返回数据长度，默认为20，最大100</span>
+<span class="sd">        :param Offset: (Optional) 列表起始位置偏移量，默认为0</span>
+<span class="sd">        :param SubnetId: (Optional) 子网id。通过子网筛选主机。北京一地域无效。</span>
+<span class="sd">        :param Tag: (Optional) 要查询的业务组名称</span>
+<span class="sd">        :param UHostIds: (Optional) 【数组】UHost主机的资源ID，例如UHostIds.0代表希望获取信息 的主机1，UHostIds.1代表主机2。 如果不传入，则返回当前Region 所有符合条件的UHost实例。</span>
+<span class="sd">        :param VPCId: (Optional) vpc id。通过VPC筛选主机。北京一地域无效。</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;DescribeUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.describe_uhost_tags"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.describe_uhost_tags">[docs]</a>    <span class="k">def</span> <span class="nf">describe_uhost_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; DescribeUHostTags - 获取指定数据中心的业务组列表。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeUHostTagsRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;DescribeUHostTags&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">DescribeUHostTagsResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.poweroff_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.poweroff_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">poweroff_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; PoweroffUHostInstance - 直接关闭UHost实例电源，无需等待实例正常关闭。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](./describe_uhost_instance.html)</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">PoweroffUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;PoweroffUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">PoweroffUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.reinstall_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.reinstall_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">reinstall_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ReinstallUHostInstance - 重新安装指定UHost实例的操作系统</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例资源ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param BootDiskSpace: (Optional) 系统盘大小。 单位：GB， 范围[20,100]， 步长：10</span>
+<span class="sd">        :param DNSServers: (Optional) 针对非私有子网主机，可自定义DNS。n可为0-2</span>
+<span class="sd">        :param ImageId: (Optional) 镜像Id，默认使用原镜像 参见 [DescribeImage](describe_image.html)</span>
+<span class="sd">        :param Password: (Optional) 如果创建UHost实例时LoginMode为Password，则必须填写，如果LoginMode为KeyPair，不需要填写 （密码格式使用BASE64编码；LoginMode不可变更）</span>
+<span class="sd">        :param ReserveDisk: (Optional) 是否保留数据盘，保留：Yes，不报留：No， 默认：Yes；如果是从Windows重装为Linux或反之，则无法保留数据盘</span>
+<span class="sd">        :param ResourceType: (Optional) 云灾备指明191</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ReinstallUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ReinstallUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ReinstallUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.terminate_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.terminate_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">terminate_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; TerminateUHostInstance - 删除指定数据中心的UHost实例。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost资源Id 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param Destroy: (Optional) 是否直接删除，0表示按照原来的逻辑（有回收站权限，则进入回收站），1表示直接删除</span>
+<span class="sd">        :param ReleaseEIP: (Optional) 是否释放绑定的EIP。true: 解绑EIP后，并释放；其他值或不填：解绑EIP。</span>
+<span class="sd">        :param ReleaseUDisk: (Optional) 是否删除挂载的数据盘。true删除，其他不删除。</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">TerminateUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;TerminateUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">TerminateUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.create_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.create_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">create_uhost_instance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; CreateUHostInstance - 创建UHost实例。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param ImageId: (Required) 镜像ID。 请通过 [DescribeImage](describe_image.html)获取</span>
+<span class="sd">        :param LoginMode: (Required) 主机登陆模式。密码（默认选项）: Password。</span>
+<span class="sd">        :param Password: (Required) UHost密码。请遵照[[api:uhost-api:specification|字段规范]]设定密码。密码需使用base64进行编码，举例如下：# echo -n Password1 | base64UGFzc3dvcmQx。</span>
+<span class="sd">        :param Zone: (Required) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param AlarmTemplateId: (Optional) 告警模板id，如果传了告警模板id，且告警模板id正确，则绑定告警模板。绑定告警模板失败只会在后台有日志，不会影响创建主机流程，也不会在前端报错。</span>
+<span class="sd">        :param BootDiskSpace: (Optional) 【待废弃，不建议调用】系统盘大小。 单位：GB， 范围[20,100]， 步长：10</span>
+<span class="sd">        :param CPU: (Optional) 虚拟CPU核数。可选参数：1-64（可选范围与UHostType相关）。默认值: 4，只有Intel/Cascadelake支持CPU 64。</span>
+<span class="sd">        :param ChargeType: (Optional) 计费模式。枚举值为： \\ &gt; Year，按年付费； \\ &gt; Month，按月付费；\\ &gt; Dynamic，按小时付费 \\ 默认为月付；\\ &gt;Postpay ，后付费。</span>
+<span class="sd">        :param CouponId: (Optional) 主机代金券ID。请通过DescribeCoupon接口查询，或登录用户中心查看</span>
+<span class="sd">        :param DiskPassword: (Optional) 【待废弃，不建议调用】加密盘的密码。若输入此字段，自动选择加密盘。加密盘需要权限位。</span>
+<span class="sd">        :param DiskSpace: (Optional) 【待废弃，不建议调用】数据盘大小。 单位：GB， 范围[0,8000]， 步长：10， 默认值：20，云盘支持0-8000；本地普通盘支持0-2000；本地SSD盘（包括所有GPU机型）支持100-1000</span>
+<span class="sd">        :param Disks: (Optional) Disks</span>
+<span class="sd">        :param GPU: (Optional) GPU卡核心数。仅GPU机型支持此字段（可选范围与UHostType相关）</span>
+<span class="sd">        :param GpuType: (Optional) GPU类型，枚举值[&quot;K80&quot;, &quot;P40&quot;, &quot;V100&quot;]</span>
+<span class="sd">        :param HostType: (Optional) 【已废弃】宿主机类型，N2，N1</span>
+<span class="sd">        :param HotplugFeature: (Optional) 【待废弃，不建议调用】是否开启热升级特性。True为开启，False为未开启，默认False。仅系列1云主机需要使用此字段，系列2云主机根据镜像是否支持云主机。</span>
+<span class="sd">        :param InstallAgent: (Optional) 【暂不支持】是否安装UGA。&#39;yes&#39;: 安装；其他或者不填：不安装。</span>
+<span class="sd">        :param IsolationGroup: (Optional) 硬件隔离组id。可通过DescribeIsolationGroup获取。</span>
+<span class="sd">        :param KeyPair: (Optional) 【暂不支持】Keypair公钥，LoginMode为KeyPair时此项必须</span>
+<span class="sd">        :param MachineType: (Optional) 云主机类型，枚举值[&quot;N&quot;, &quot;C&quot;, &quot;G&quot;, &quot;O&quot;]</span>
+<span class="sd">        :param MaxCount: (Optional) 【批量创建主机时必填】最大创建主机数量，取值范围是[1,100];</span>
+<span class="sd">        :param Memory: (Optional) 内存大小。单位：MB。范围 ：[1024, 262144]，取值为1024的倍数（可选范围与UHostType相关）。默认值：8192</span>
+<span class="sd">        :param MinimalCpuPlatform: (Optional) 最低cpu平台，枚举值[&quot;Intel/Auto&quot;, &quot;Intel/IvyBridge&quot;, &quot;Intel/Haswell&quot;, &quot;Intel/Broadwell&quot;, &quot;Intel/Skylake&quot;, &quot;Intel/Cascadelake&quot;(只有O型云主机可选)]</span>
+<span class="sd">        :param Name: (Optional) UHost实例名称。默认：UHost。请遵照[[api:uhost-api:specification|字段规范]]设定实例名称。</span>
+<span class="sd">        :param NetCapability: (Optional) 网络增强。枚举值：Normal（默认），不开启;  Super，开启网络增强1.0； Ultra，开启网络增强2.0（仅支持部分可用区，请参考控制台）</span>
+<span class="sd">        :param NetworkId: (Optional) 【已废弃】网络ID（VPC2.0情况下无需填写）。VPC1.0情况下，若不填写，代表优先选择基础网络； 若填写，代表选择子网。参见DescribeSubnet。</span>
+<span class="sd">        :param NetworkInterface: (Optional) NetworkInterface</span>
+<span class="sd">        :param PrivateIp: (Optional) 【数组】创建云主机时指定内网IP。若不传值，则随机分配当前子网下的IP。调用方式举例：PrivateIp.0=x.x.x.x。当前只支持一个内网IP。</span>
+<span class="sd">        :param PrivateMac: (Optional) 【批量创建该参数无效】【内部字段】创建云主机时指定Mac。调用方式举例：PrivateMac=&quot;xx:xx:xx:xx:xx:xx&quot;。</span>
+<span class="sd">        :param Quantity: (Optional) 购买时长。默认:值 1。按小时购买(Dynamic)时无需此参数。 月付时，此参数传0，代表购买至月末。</span>
+<span class="sd">        :param ResourceType: (Optional) 【内部参数】资源类型</span>
+<span class="sd">        :param SecurityGroupId: (Optional) 防火墙Id，默认：Web推荐防火墙。如何查询SecurityGroupId请参见 [DescribeSecurityGroup](../unet-api/describe_security_group.html)。</span>
+<span class="sd">        :param SetId: (Optional) </span>
+<span class="sd">        :param StorageType: (Optional) 【待废弃，不建议调用】磁盘类型，同时设定系统盘和数据盘的磁盘类型。枚举值为：LocalDisk，本地磁盘; UDisk，云硬盘；默认为LocalDisk。仅部分可用区支持云硬盘方式的主机存储方式，具体请查询控制台。</span>
+<span class="sd">        :param SubnetId: (Optional) 子网 ID。默认为当前地域的默认子网。</span>
+<span class="sd">        :param Tag: (Optional) 业务组。默认：Default（Default即为未分组）。请遵照[[api:uhost-api:specification|字段规范]]设定业务组。</span>
+<span class="sd">        :param TimemachineFeature: (Optional) 【待废弃，不建议调用】是否开启方舟特性。Yes为开启方舟，No为关闭方舟。目前仅选择普通本地盘+普通本地盘 或 SSD云盘+普通云盘的组合支持开启方舟。</span>
+<span class="sd">        :param UHostType: (Optional) 云主机机型。参考[[api:uhost-api:uhost_type|云主机机型说明]]。【待废弃，不建议调用】</span>
+<span class="sd">        :param UserDataScript: (Optional) 【暂不支持】cloudinit方式下，用户初始化脚本</span>
+<span class="sd">        :param VPCId: (Optional) VPC ID。默认为当前地域的默认VPC。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">CreateUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># build options</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;max_retries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># ignore retry when api is not idempotent</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;CreateUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">CreateUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.import_custom_image"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.import_custom_image">[docs]</a>    <span class="k">def</span> <span class="nf">import_custom_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ImportCustomImage - 把UFile的镜像文件导入到UHost，生成自定义镜像</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param Auth: (Required) 是否授权。必须填true</span>
+<span class="sd">        :param Format: (Required) 镜像格式，可选RAW、VHD、VMDK、qcow2</span>
+<span class="sd">        :param ImageName: (Required) 镜像名称</span>
+<span class="sd">        :param OsName: (Required) 操作系统详细版本，请参考控制台的镜像版本；OsType为Other时，输入参数为Other</span>
+<span class="sd">        :param OsType: (Required) 操作系统平台，比如CentOS、Ubuntu、Windows、RedHat等，请参考控制台的镜像版本；若导入控制台上没有的操作系统，参数为Other</span>
+<span class="sd">        :param UFileUrl: (Required) UFile私有空间地址</span>
+<span class="sd">        :param ImageDescription: (Optional) 镜像描述</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ImportCustomImageRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># build options</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;max_retries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># ignore retry when api is not idempotent</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ImportCustomImage&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ImportCustomImageResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.start_uhost_instance"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.start_uhost_instance">[docs]</a>    <span class="k">def</span> <span class="nf">start_uhost_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; StartUHostInstance - 启动处于关闭状态的UHost实例，需要指定数据中心及UHostID两个参数的值。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param DiskPassword: (Optional) 加密盘密码</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">StartUHostInstanceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;StartUHostInstance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">StartUHostInstanceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.reset_uhost_instance_password"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.reset_uhost_instance_password">[docs]</a>    <span class="k">def</span> <span class="nf">reset_uhost_instance_password</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ResetUHostInstancePassword - 重置UHost实例的管理员密码。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param Password: (Required) UHost新密码（密码格式使用BASE64编码）</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResetUHostInstancePasswordRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ResetUHostInstancePassword&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ResetUHostInstancePasswordResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.terminate_custom_image"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.terminate_custom_image">[docs]</a>    <span class="k">def</span> <span class="nf">terminate_custom_image</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; TerminateCustomImage - 删除用户自定义镜像</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param ImageId: (Required) 自制镜像ID 参见 [DescribeImage](describe_image.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">TerminateCustomImageRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;TerminateCustomImage&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">TerminateCustomImageResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.create_custom_image"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.create_custom_image">[docs]</a>    <span class="k">def</span> <span class="nf">create_custom_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; CreateCustomImage - 从指定UHost实例，生成自定义镜像。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param ImageName: (Required) 镜像名称</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param ImageDescription: (Optional) 镜像描述</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">CreateCustomImageRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="c1"># build options</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;max_retries&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># ignore retry when api is not idempotent</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;CreateCustomImage&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">CreateCustomImageResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.get_uhost_instance_vnc_info"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.get_uhost_instance_vnc_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_uhost_instance_vnc_info</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; GetUHostInstanceVncInfo - 获取指定UHost实例的管理VNC配置详细信息。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](./describe_uhost_instance.html)</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostInstanceVncInfoRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;GetUHostInstanceVncInfo&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostInstanceVncInfoResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.get_uhost_upgrade_price"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.get_uhost_upgrade_price">[docs]</a>    <span class="k">def</span> <span class="nf">get_uhost_upgrade_price</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; GetUHostUpgradePrice - 获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID。 参见 [DescribeUHostInstance](describe_uhost_instance.html)。</span>
+<span class="sd">        :param BootDiskSpace: (Optional) 【待废弃】系统大小，单位: GB，范围[20,100]，步长: 10。</span>
+<span class="sd">        :param CPU: (Optional) 虚拟CPU核数。可选参数：1-32（可选范围与UHostType相关）。默认值为当前实例的CPU核数。</span>
+<span class="sd">        :param DiskSpace: (Optional) 【待废弃】数据盘大小，单位: GB，范围[0,1000]，步长: 10， 默认值是该主机当前数据盘大小。</span>
+<span class="sd">        :param HostType: (Optional) 【待废弃】主机系列，目前支持N1,N2</span>
+<span class="sd">        :param Memory: (Optional) 内存大小。单位：MB。范围 ：[1024, 262144]，取值为1024的倍数（可选范围与UHostType相关）。默认值为当前实例的内存大小。</span>
+<span class="sd">        :param NetCapValue: (Optional) 网卡升降级（1，表示升级，2表示降级，0表示不变）</span>
+<span class="sd">        :param TimemachineFeature: (Optional) 方舟机型。No，Yes。默认是No。</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostUpgradePriceRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;GetUHostUpgradePrice&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">GetUHostUpgradePriceResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.modify_uhost_instance_name"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.modify_uhost_instance_name">[docs]</a>    <span class="k">def</span> <span class="nf">modify_uhost_instance_name</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ModifyUHostInstanceName - 修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param Name: (Optional) UHost实例名称</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceNameRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ModifyUHostInstanceName&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceNameResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.modify_uhost_instance_remark"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.modify_uhost_instance_remark">[docs]</a>    <span class="k">def</span> <span class="nf">modify_uhost_instance_remark</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ModifyUHostInstanceRemark - 修改指定UHost实例备注信息。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param Remark: (Optional) 备注</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceRemarkRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ModifyUHostInstanceRemark&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceRemarkResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UHostClient.modify_uhost_instance_tag"><a class="viewcode-back" href="../../../../services.html#ucloud.services.uhost.client.UHostClient.modify_uhost_instance_tag">[docs]</a>    <span class="k">def</span> <span class="nf">modify_uhost_instance_tag</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; ModifyUHostInstanceTag - 修改指定UHost实例业务组标识。</span>
+
+<span class="sd">        :param ProjectId: (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考[GetProjectList接口](../summary/get_project_list.html)</span>
+<span class="sd">        :param Region: (Config) 地域。 参见 [地域和可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        :param UHostId: (Required) UHost实例ID 参见 [DescribeUHostInstance](describe_uhost_instance.html)</span>
+<span class="sd">        :param Tag: (Optional) 业务组名称</span>
+<span class="sd">        :param Zone: (Optional) 可用区。参见 [可用区列表](../summary/regionlist.html)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build request</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ProjectId&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">region</span><span class="p">}</span>
+        <span class="n">req</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceTagRequestSchema</span><span class="p">()</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;ModifyUHostInstanceTag&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apis</span><span class="o">.</span><span class="n">ModifyUHostInstanceTagResponseSchema</span><span class="p">()</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">ucloud-sdk-python3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick_start.html">QuickStart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../services.html">UCloud SDK Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../helpers.html">Helpers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, ucloud.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
