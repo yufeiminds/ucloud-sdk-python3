@@ -1,10 +1,20 @@
+import logging
+import typing
 from ucloud.core import client
+from ucloud.core.transport import Transport
+from ucloud.core.utils.middleware import Middleware
 
 
 class Client(client.Client):
-    def __init__(self, config: dict, transport=None, middleware=None):
+    def __init__(
+        self,
+        config: dict,
+        transport: typing.Optional[Transport] = None,
+        middleware: typing.Optional[Middleware] = None,
+        logger: typing.Optional[logging.Logger] = None,
+    ):
         self._config = config
-        super(Client, self).__init__(config, transport, middleware)
+        super(Client, self).__init__(config, transport, middleware, logger)
 
     def umem(self):
         from ucloud.services.umem.client import UMemClient
