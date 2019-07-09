@@ -7,277 +7,6 @@ from ucloud.services.uhost.schemas import models
 
 
 """
-API: CreateUHostInstance
-
-创建UHost实例。
-"""
-
-
-class CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSHSchema(schema.RequestSchema):
-    """ CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSH - CreateUHostInstance
-    """
-
-    fields = {
-        "Port": fields.Int(required=False, dump_to="Port"),
-        "Area": fields.Str(required=False, dump_to="Area"),
-        "AreaCode": fields.Str(required=False, dump_to="AreaCode"),
-    }
-
-
-class CreateUHostInstanceParamNetworkInterfaceEIPSchema(schema.RequestSchema):
-    """ CreateUHostInstanceParamNetworkInterfaceEIP - CreateUHostInstance
-    """
-
-    fields = {
-        "PayMode": fields.Str(required=False, dump_to="PayMode"),
-        "Bandwidth": fields.Int(required=False, dump_to="Bandwidth"),
-        "ShareBandwidthId": fields.Str(required=False, dump_to="ShareBandwidthId"),
-        "OperatorName": fields.Str(required=False, dump_to="OperatorName"),
-        "GlobalSSH": CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSHSchema(
-            required=False, dump_to="GlobalSSH"
-        ),
-        "CouponId": fields.Str(required=False, dump_to="CouponId"),
-    }
-
-
-class CreateUHostInstanceParamNetworkInterfaceSchema(schema.RequestSchema):
-    """ CreateUHostInstanceParamNetworkInterface - CreateUHostInstance
-    """
-
-    fields = {
-        "EIP": CreateUHostInstanceParamNetworkInterfaceEIPSchema(
-            required=False, dump_to="EIP"
-        )
-    }
-
-
-class CreateUHostInstanceParamDisksSchema(schema.RequestSchema):
-    """ CreateUHostInstanceParamDisks - CreateUHostInstance
-    """
-
-    fields = {
-        "Type": fields.Str(required=True, dump_to="Type"),
-        "Encrypted": fields.Bool(required=False, dump_to="Encrypted"),
-        "KmsKeyId": fields.Str(required=False, dump_to="KmsKeyId"),
-        "CouponId": fields.Str(required=False, dump_to="CouponId"),
-        "IsBoot": fields.Str(required=True, dump_to="IsBoot"),
-        "Size": fields.Int(required=True, dump_to="Size"),
-        "BackupType": fields.Str(required=False, dump_to="BackupType"),
-    }
-
-
-class CreateUHostInstanceRequestSchema(schema.RequestSchema):
-    """ CreateUHostInstance - 创建UHost实例。
-    """
-
-    fields = {
-        "NetworkInterface": fields.List(
-            CreateUHostInstanceParamNetworkInterfaceSchema()
-        ),
-        "Name": fields.Str(required=False, dump_to="Name"),
-        "MinimalCpuPlatform": fields.Str(required=False, dump_to="MinimalCpuPlatform"),
-        "PrivateMac": fields.Str(required=False, dump_to="PrivateMac"),
-        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
-        "Zone": fields.Str(required=True, dump_to="Zone"),
-        "Password": fields.Base64(required=True, dump_to="Password"),
-        "KeyPair": fields.Str(required=False, dump_to="KeyPair"),
-        "IsolationGroup": fields.Str(required=False, dump_to="IsolationGroup"),
-        "LoginMode": fields.Str(required=True, dump_to="LoginMode"),
-        "HotplugFeature": fields.Bool(required=False, dump_to="HotplugFeature"),
-        "ResourceType": fields.Int(required=False, dump_to="ResourceType"),
-        "SetId": fields.Int(required=False, dump_to="SetId"),
-        "StorageType": fields.Str(required=False, dump_to="StorageType"),
-        "MaxCount": fields.Int(required=False, dump_to="MaxCount"),
-        "SubnetId": fields.Str(required=False, dump_to="SubnetId"),
-        "CouponId": fields.Str(required=False, dump_to="CouponId"),
-        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
-        "NetCapability": fields.Str(required=False, dump_to="NetCapability"),
-        "UserDataScript": fields.Str(required=False, dump_to="UserDataScript"),
-        "GpuType": fields.Str(required=False, dump_to="GpuType"),
-        "Quantity": fields.Int(required=False, dump_to="Quantity"),
-        "CPU": fields.Int(required=False, dump_to="CPU"),
-        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
-        "ChargeType": fields.Str(required=False, dump_to="ChargeType"),
-        "MachineType": fields.Str(required=False, dump_to="MachineType"),
-        "DiskPassword": fields.Str(required=False, dump_to="DiskPassword"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "SecurityGroupId": fields.Str(required=False, dump_to="SecurityGroupId"),
-        "PrivateIp": fields.List(fields.Str()),
-        "Tag": fields.Str(required=False, dump_to="Tag"),
-        "VPCId": fields.Str(required=False, dump_to="VPCId"),
-        "AlarmTemplateId": fields.Int(required=False, dump_to="AlarmTemplateId"),
-        "Memory": fields.Int(required=False, dump_to="Memory"),
-        "NetworkId": fields.Str(required=False, dump_to="NetworkId"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "ImageId": fields.Str(required=True, dump_to="ImageId"),
-        "UHostType": fields.Str(required=False, dump_to="UHostType"),
-        "Disks": fields.List(CreateUHostInstanceParamDisksSchema()),
-        "GPU": fields.Int(required=False, dump_to="GPU"),
-        "HostType": fields.Str(required=False, dump_to="HostType"),
-        "InstallAgent": fields.Str(required=False, dump_to="InstallAgent"),
-    }
-
-
-class CreateUHostInstanceResponseSchema(schema.ResponseSchema):
-    """ CreateUHostInstance - 创建UHost实例。
-    """
-
-    fields = {
-        "UHostIds": fields.List(fields.Str(), required=False, load_from="UHostIds"),
-        "IPs": fields.List(fields.Str(), required=False, load_from="IPs"),
-    }
-
-
-"""
-API: DescribeUHostInstance
-
-获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
-"""
-
-
-class DescribeUHostInstanceRequestSchema(schema.RequestSchema):
-    """ DescribeUHostInstance - 获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
-    """
-
-    fields = {
-        "VPCId": fields.Str(required=False, dump_to="VPCId"),
-        "UHostIds": fields.List(fields.Str()),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "Tag": fields.Str(required=False, dump_to="Tag"),
-        "LifeCycle": fields.Int(required=False, dump_to="LifeCycle"),
-        "Limit": fields.Int(required=False, dump_to="Limit"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Offset": fields.Int(required=False, dump_to="Offset"),
-        "IsolationGroup": fields.Str(required=False, dump_to="IsolationGroup"),
-        "SubnetId": fields.Str(required=False, dump_to="SubnetId"),
-    }
-
-
-class DescribeUHostInstanceResponseSchema(schema.ResponseSchema):
-    """ DescribeUHostInstance - 获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
-    """
-
-    fields = {
-        "UHostSet": fields.List(
-            models.UHostInstanceSetSchema(), required=False, load_from="UHostSet"
-        ),
-        "TotalCount": fields.Int(required=False, load_from="TotalCount"),
-    }
-
-
-"""
-API: GetUHostInstancePrice
-
-根据UHost实例配置，获取UHost实例的价格。
-"""
-
-
-class GetUHostInstancePriceParamDisksSchema(schema.RequestSchema):
-    """ GetUHostInstancePriceParamDisks - GetUHostInstancePrice
-    """
-
-    fields = {
-        "BackupType": fields.Str(required=False, dump_to="BackupType"),
-        "Size": fields.Int(required=True, dump_to="Size"),
-        "Type": fields.Str(required=True, dump_to="Type"),
-        "IsBoot": fields.Str(required=True, dump_to="IsBoot"),
-    }
-
-
-class GetUHostInstancePriceRequestSchema(schema.RequestSchema):
-    """ GetUHostInstancePrice - 根据UHost实例配置，获取UHost实例的价格。
-    """
-
-    fields = {
-        "CPU": fields.Int(required=True, dump_to="CPU"),
-        "NetCapability": fields.Str(required=False, dump_to="NetCapability"),
-        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
-        "Disks": fields.List(GetUHostInstancePriceParamDisksSchema()),
-        "ChargeType": fields.Str(required=False, dump_to="ChargeType"),
-        "LifeCycle": fields.Int(required=False, dump_to="LifeCycle"),
-        "Quantity": fields.Int(required=False, dump_to="Quantity"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Memory": fields.Int(required=True, dump_to="Memory"),
-        "Count": fields.Int(required=True, dump_to="Count"),
-        "MachineType": fields.Str(required=False, dump_to="MachineType"),
-        "ImageId": fields.Str(required=True, dump_to="ImageId"),
-        "StorageType": fields.Str(required=False, dump_to="StorageType"),
-        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "GPU": fields.Int(required=False, dump_to="GPU"),
-        "UHostType": fields.Str(required=False, dump_to="UHostType"),
-        "GpuType": fields.Str(required=False, dump_to="GpuType"),
-    }
-
-
-class GetUHostInstancePriceResponseSchema(schema.ResponseSchema):
-    """ GetUHostInstancePrice - 根据UHost实例配置，获取UHost实例的价格。
-    """
-
-    fields = {
-        "PriceSet": fields.List(
-            models.UHostPriceSetSchema(), required=False, load_from="PriceSet"
-        )
-    }
-
-
-"""
-API: PoweroffUHostInstance
-
-直接关闭UHost实例电源，无需等待实例正常关闭。
-"""
-
-
-class PoweroffUHostInstanceRequestSchema(schema.RequestSchema):
-    """ PoweroffUHostInstance - 直接关闭UHost实例电源，无需等待实例正常关闭。
-    """
-
-    fields = {
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-    }
-
-
-class PoweroffUHostInstanceResponseSchema(schema.ResponseSchema):
-    """ PoweroffUHostInstance - 直接关闭UHost实例电源，无需等待实例正常关闭。
-    """
-
-    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
-
-
-"""
-API: ResizeAttachedDisk
-
-修改挂载的磁盘大小，包含系统盘和数据盘
-"""
-
-
-class ResizeAttachedDiskRequestSchema(schema.RequestSchema):
-    """ ResizeAttachedDisk - 修改挂载的磁盘大小，包含系统盘和数据盘
-    """
-
-    fields = {
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "DiskSpace": fields.Int(required=True, dump_to="DiskSpace"),
-        "DiskId": fields.Str(required=True, dump_to="DiskId"),
-    }
-
-
-class ResizeAttachedDiskResponseSchema(schema.ResponseSchema):
-    """ ResizeAttachedDisk - 修改挂载的磁盘大小，包含系统盘和数据盘
-    """
-
-    fields = {"DiskId": fields.Str(required=False, load_from="DiskId")}
-
-
-"""
 API: CopyCustomImage
 
 复制自制镜像
@@ -289,6 +18,9 @@ class CopyCustomImageRequestSchema(schema.RequestSchema):
     """
 
     fields = {
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "SourceImageId": fields.Str(required=True, dump_to="SourceImageId"),
         "TargetProjectId": fields.Str(required=True, dump_to="TargetProjectId"),
         "TargetRegion": fields.Str(required=False, dump_to="TargetRegion"),
@@ -296,9 +28,6 @@ class CopyCustomImageRequestSchema(schema.RequestSchema):
         "TargetImageDescription": fields.Str(
             required=False, dump_to="TargetImageDescription"
         ),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
     }
 
 
@@ -321,12 +50,12 @@ class CreateCustomImageRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "ImageName": fields.Str(required=True, dump_to="ImageName"),
         "ImageDescription": fields.Str(required=False, dump_to="ImageDescription"),
         "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "ImageName": fields.Str(required=True, dump_to="ImageName"),
     }
 
 
@@ -335,6 +64,128 @@ class CreateCustomImageResponseSchema(schema.ResponseSchema):
     """
 
     fields = {"ImageId": fields.Str(required=False, load_from="ImageId")}
+
+
+"""
+API: CreateUHostInstance
+
+创建UHost实例。
+"""
+
+
+class CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSHSchema(schema.RequestSchema):
+    """ CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSH - CreateUHostInstance
+    """
+
+    fields = {
+        "AreaCode": fields.Str(required=False, dump_to="AreaCode"),
+        "Port": fields.Int(required=False, dump_to="Port"),
+        "Area": fields.Str(required=False, dump_to="Area"),
+    }
+
+
+class CreateUHostInstanceParamNetworkInterfaceEIPSchema(schema.RequestSchema):
+    """ CreateUHostInstanceParamNetworkInterfaceEIP - CreateUHostInstance
+    """
+
+    fields = {
+        "Bandwidth": fields.Int(required=False, dump_to="Bandwidth"),
+        "ShareBandwidthId": fields.Str(required=False, dump_to="ShareBandwidthId"),
+        "OperatorName": fields.Str(required=False, dump_to="OperatorName"),
+        "CouponId": fields.Str(required=False, dump_to="CouponId"),
+        "GlobalSSH": CreateUHostInstanceParamNetworkInterfaceEIPGlobalSSHSchema(
+            required=False, dump_to="GlobalSSH"
+        ),
+        "PayMode": fields.Str(required=False, dump_to="PayMode"),
+    }
+
+
+class CreateUHostInstanceParamDisksSchema(schema.RequestSchema):
+    """ CreateUHostInstanceParamDisks - CreateUHostInstance
+    """
+
+    fields = {
+        "IsBoot": fields.Str(required=True, dump_to="IsBoot"),
+        "Type": fields.Str(required=True, dump_to="Type"),
+        "BackupType": fields.Str(required=False, dump_to="BackupType"),
+        "Size": fields.Int(required=True, dump_to="Size"),
+        "Encrypted": fields.Bool(required=False, dump_to="Encrypted"),
+        "CouponId": fields.Str(required=False, dump_to="CouponId"),
+        "KmsKeyId": fields.Str(required=False, dump_to="KmsKeyId"),
+    }
+
+
+class CreateUHostInstanceParamNetworkInterfaceSchema(schema.RequestSchema):
+    """ CreateUHostInstanceParamNetworkInterface - CreateUHostInstance
+    """
+
+    fields = {
+        "EIP": CreateUHostInstanceParamNetworkInterfaceEIPSchema(
+            required=False, dump_to="EIP"
+        )
+    }
+
+
+class CreateUHostInstanceRequestSchema(schema.RequestSchema):
+    """ CreateUHostInstance - 创建UHost实例。
+    """
+
+    fields = {
+        "PrivateIp": fields.List(fields.Str()),
+        "SubnetId": fields.Str(required=False, dump_to="SubnetId"),
+        "InstallAgent": fields.Str(required=False, dump_to="InstallAgent"),
+        "StorageType": fields.Str(required=False, dump_to="StorageType"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "ImageId": fields.Str(required=True, dump_to="ImageId"),
+        "Name": fields.Str(required=False, dump_to="Name"),
+        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
+        "Quantity": fields.Int(required=False, dump_to="Quantity"),
+        "KeyPair": fields.Str(required=False, dump_to="KeyPair"),
+        "NetCapability": fields.Str(required=False, dump_to="NetCapability"),
+        "HostType": fields.Str(required=False, dump_to="HostType"),
+        "SetId": fields.Int(required=False, dump_to="SetId"),
+        "MachineType": fields.Str(required=False, dump_to="MachineType"),
+        "NetworkInterface": fields.List(
+            CreateUHostInstanceParamNetworkInterfaceSchema()
+        ),
+        "Password": fields.Base64(required=True, dump_to="Password"),
+        "CPU": fields.Int(required=False, dump_to="CPU"),
+        "VPCId": fields.Str(required=False, dump_to="VPCId"),
+        "NetworkId": fields.Str(required=False, dump_to="NetworkId"),
+        "GpuType": fields.Str(required=False, dump_to="GpuType"),
+        "Zone": fields.Str(required=True, dump_to="Zone"),
+        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
+        "DiskPassword": fields.Str(required=False, dump_to="DiskPassword"),
+        "Memory": fields.Int(required=False, dump_to="Memory"),
+        "GPU": fields.Int(required=False, dump_to="GPU"),
+        "IsolationGroup": fields.Str(required=False, dump_to="IsolationGroup"),
+        "CouponId": fields.Str(required=False, dump_to="CouponId"),
+        "Disks": fields.List(CreateUHostInstanceParamDisksSchema()),
+        "LoginMode": fields.Str(required=True, dump_to="LoginMode"),
+        "MinimalCpuPlatform": fields.Str(required=False, dump_to="MinimalCpuPlatform"),
+        "Tag": fields.Str(required=False, dump_to="Tag"),
+        "ChargeType": fields.Str(required=False, dump_to="ChargeType"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "UHostType": fields.Str(required=False, dump_to="UHostType"),
+        "AlarmTemplateId": fields.Int(required=False, dump_to="AlarmTemplateId"),
+        "UserDataScript": fields.Str(required=False, dump_to="UserDataScript"),
+        "ResourceType": fields.Int(required=False, dump_to="ResourceType"),
+        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
+        "HotplugFeature": fields.Bool(required=False, dump_to="HotplugFeature"),
+        "PrivateMac": fields.Str(required=False, dump_to="PrivateMac"),
+        "SecurityGroupId": fields.Str(required=False, dump_to="SecurityGroupId"),
+        "MaxCount": fields.Int(required=False, dump_to="MaxCount"),
+    }
+
+
+class CreateUHostInstanceResponseSchema(schema.ResponseSchema):
+    """ CreateUHostInstance - 创建UHost实例。
+    """
+
+    fields = {
+        "UHostIds": fields.List(fields.Str(), required=False, load_from="UHostIds"),
+        "IPs": fields.List(fields.Str(), required=False, load_from="IPs"),
+    }
 
 
 """
@@ -349,14 +200,14 @@ class DescribeImageRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "ImageId": fields.Str(required=False, dump_to="ImageId"),
-        "Offset": fields.Int(required=False, dump_to="Offset"),
-        "PriceSet": fields.Int(required=False, dump_to="PriceSet"),
-        "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "ImageType": fields.Str(required=False, dump_to="ImageType"),
+        "ImageId": fields.Str(required=False, dump_to="ImageId"),
+        "PriceSet": fields.Int(required=False, dump_to="PriceSet"),
+        "Region": fields.Str(required=True, dump_to="Region"),
         "OsType": fields.Str(required=False, dump_to="OsType"),
+        "Offset": fields.Int(required=False, dump_to="Offset"),
         "Limit": fields.Int(required=False, dump_to="Limit"),
     }
 
@@ -370,6 +221,131 @@ class DescribeImageResponseSchema(schema.ResponseSchema):
         "ImageSet": fields.List(
             models.UHostImageSetSchema(), required=False, load_from="ImageSet"
         ),
+    }
+
+
+"""
+API: DescribeUHostInstance
+
+获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
+"""
+
+
+class DescribeUHostInstanceRequestSchema(schema.RequestSchema):
+    """ DescribeUHostInstance - 获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
+    """
+
+    fields = {
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "LifeCycle": fields.Int(required=False, dump_to="LifeCycle"),
+        "Offset": fields.Int(required=False, dump_to="Offset"),
+        "Tag": fields.Str(required=False, dump_to="Tag"),
+        "Limit": fields.Int(required=False, dump_to="Limit"),
+        "IsolationGroup": fields.Str(required=False, dump_to="IsolationGroup"),
+        "VPCId": fields.Str(required=False, dump_to="VPCId"),
+        "SubnetId": fields.Str(required=False, dump_to="SubnetId"),
+        "UHostIds": fields.List(fields.Str()),
+    }
+
+
+class DescribeUHostInstanceResponseSchema(schema.ResponseSchema):
+    """ DescribeUHostInstance - 获取主机或主机列表信息，并可根据数据中心，主机ID等参数进行过滤。
+    """
+
+    fields = {
+        "TotalCount": fields.Int(required=False, load_from="TotalCount"),
+        "UHostSet": fields.List(
+            models.UHostInstanceSetSchema(), required=False, load_from="UHostSet"
+        ),
+    }
+
+
+"""
+API: DescribeUHostTags
+
+获取指定数据中心的业务组列表。
+"""
+
+
+class DescribeUHostTagsRequestSchema(schema.RequestSchema):
+    """ DescribeUHostTags - 获取指定数据中心的业务组列表。
+    """
+
+    fields = {
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+    }
+
+
+class DescribeUHostTagsResponseSchema(schema.ResponseSchema):
+    """ DescribeUHostTags - 获取指定数据中心的业务组列表。
+    """
+
+    fields = {
+        "TotalCount": fields.Int(required=False, load_from="TotalCount"),
+        "TagSet": fields.List(
+            models.UHostTagSetSchema(), required=False, load_from="TagSet"
+        ),
+    }
+
+
+"""
+API: GetUHostInstancePrice
+
+根据UHost实例配置，获取UHost实例的价格。
+"""
+
+
+class GetUHostInstancePriceParamDisksSchema(schema.RequestSchema):
+    """ GetUHostInstancePriceParamDisks - GetUHostInstancePrice
+    """
+
+    fields = {
+        "BackupType": fields.Str(required=False, dump_to="BackupType"),
+        "IsBoot": fields.Str(required=True, dump_to="IsBoot"),
+        "Type": fields.Str(required=True, dump_to="Type"),
+        "Size": fields.Int(required=True, dump_to="Size"),
+    }
+
+
+class GetUHostInstancePriceRequestSchema(schema.RequestSchema):
+    """ GetUHostInstancePrice - 根据UHost实例配置，获取UHost实例的价格。
+    """
+
+    fields = {
+        "NetCapability": fields.Str(required=False, dump_to="NetCapability"),
+        "LifeCycle": fields.Int(required=False, dump_to="LifeCycle"),
+        "Quantity": fields.Int(required=False, dump_to="Quantity"),
+        "CPU": fields.Int(required=True, dump_to="CPU"),
+        "Memory": fields.Int(required=True, dump_to="Memory"),
+        "ChargeType": fields.Str(required=False, dump_to="ChargeType"),
+        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
+        "MachineType": fields.Str(required=False, dump_to="MachineType"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "ImageId": fields.Str(required=True, dump_to="ImageId"),
+        "StorageType": fields.Str(required=False, dump_to="StorageType"),
+        "Disks": fields.List(GetUHostInstancePriceParamDisksSchema()),
+        "UHostType": fields.Str(required=False, dump_to="UHostType"),
+        "GpuType": fields.Str(required=False, dump_to="GpuType"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Count": fields.Int(required=True, dump_to="Count"),
+        "GPU": fields.Int(required=False, dump_to="GPU"),
+        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
+    }
+
+
+class GetUHostInstancePriceResponseSchema(schema.ResponseSchema):
+    """ GetUHostInstancePrice - 根据UHost实例配置，获取UHost实例的价格。
+    """
+
+    fields = {
+        "PriceSet": fields.List(
+            models.UHostPriceSetSchema(), required=False, load_from="PriceSet"
+        )
     }
 
 
@@ -397,11 +373,44 @@ class GetUHostInstanceVncInfoResponseSchema(schema.ResponseSchema):
     """
 
     fields = {
-        "UhostId": fields.Str(required=False, load_from="UhostId"),
         "VncIP": fields.Str(required=False, load_from="VncIP"),
         "VncPort": fields.Int(required=False, load_from="VncPort"),
         "VncPassword": fields.Str(required=False, load_from="VncPassword"),
+        "UhostId": fields.Str(required=False, load_from="UhostId"),
     }
+
+
+"""
+API: GetUHostUpgradePrice
+
+获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
+"""
+
+
+class GetUHostUpgradePriceRequestSchema(schema.RequestSchema):
+    """ GetUHostUpgradePrice - 获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
+    """
+
+    fields = {
+        "HostType": fields.Str(required=False, dump_to="HostType"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "CPU": fields.Int(required=False, dump_to="CPU"),
+        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
+        "NetCapValue": fields.Int(required=False, dump_to="NetCapValue"),
+        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
+        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "Memory": fields.Int(required=False, dump_to="Memory"),
+    }
+
+
+class GetUHostUpgradePriceResponseSchema(schema.ResponseSchema):
+    """ GetUHostUpgradePrice - 获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
+    """
+
+    fields = {"Price": fields.Float(required=False, load_from="Price")}
 
 
 """
@@ -416,15 +425,15 @@ class ImportCustomImageRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "Format": fields.Str(required=True, dump_to="Format"),
-        "ImageDescription": fields.Str(required=False, dump_to="ImageDescription"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "Format": fields.Str(required=True, dump_to="Format"),
+        "Auth": fields.Bool(required=True, dump_to="Auth"),
+        "ImageDescription": fields.Str(required=False, dump_to="ImageDescription"),
+        "OsName": fields.Str(required=True, dump_to="OsName"),
+        "Region": fields.Str(required=True, dump_to="Region"),
         "ImageName": fields.Str(required=True, dump_to="ImageName"),
         "UFileUrl": fields.Str(required=True, dump_to="UFileUrl"),
         "OsType": fields.Str(required=True, dump_to="OsType"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "OsName": fields.Str(required=True, dump_to="OsName"),
-        "Auth": fields.Bool(required=True, dump_to="Auth"),
     }
 
 
@@ -433,6 +442,60 @@ class ImportCustomImageResponseSchema(schema.ResponseSchema):
     """
 
     fields = {"ImageId": fields.Str(required=False, load_from="ImageId")}
+
+
+"""
+API: ModifyUHostInstanceName
+
+修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
+"""
+
+
+class ModifyUHostInstanceNameRequestSchema(schema.RequestSchema):
+    """ ModifyUHostInstanceName - 修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
+    """
+
+    fields = {
+        "Name": fields.Str(required=False, dump_to="Name"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+    }
+
+
+class ModifyUHostInstanceNameResponseSchema(schema.ResponseSchema):
+    """ ModifyUHostInstanceName - 修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
+    """
+
+    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
+
+
+"""
+API: ModifyUHostInstanceRemark
+
+修改指定UHost实例备注信息。
+"""
+
+
+class ModifyUHostInstanceRemarkRequestSchema(schema.RequestSchema):
+    """ ModifyUHostInstanceRemark - 修改指定UHost实例备注信息。
+    """
+
+    fields = {
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "Remark": fields.Str(required=False, dump_to="Remark"),
+    }
+
+
+class ModifyUHostInstanceRemarkResponseSchema(schema.ResponseSchema):
+    """ ModifyUHostInstanceRemark - 修改指定UHost实例备注信息。
+    """
+
+    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
 
 
 """
@@ -447,16 +510,42 @@ class ModifyUHostInstanceTagRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "UHostId": fields.Str(required=True, dump_to="UHostId"),
         "Tag": fields.Str(required=False, dump_to="Tag"),
+        "Region": fields.Str(required=True, dump_to="Region"),
     }
 
 
 class ModifyUHostInstanceTagResponseSchema(schema.ResponseSchema):
     """ ModifyUHostInstanceTag - 修改指定UHost实例业务组标识。
+    """
+
+    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
+
+
+"""
+API: PoweroffUHostInstance
+
+直接关闭UHost实例电源，无需等待实例正常关闭。
+"""
+
+
+class PoweroffUHostInstanceRequestSchema(schema.RequestSchema):
+    """ PoweroffUHostInstance - 直接关闭UHost实例电源，无需等待实例正常关闭。
+    """
+
+    fields = {
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+    }
+
+
+class PoweroffUHostInstanceResponseSchema(schema.ResponseSchema):
+    """ PoweroffUHostInstance - 直接关闭UHost实例电源，无需等待实例正常关闭。
     """
 
     fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
@@ -474,11 +563,11 @@ class RebootUHostInstanceRequestSchema(schema.RequestSchema):
     """
 
     fields = {
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "DiskPassword": fields.Str(required=False, dump_to="DiskPassword"),
         "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "DiskPassword": fields.Str(required=False, dump_to="DiskPassword"),
     }
 
 
@@ -501,16 +590,16 @@ class ReinstallUHostInstanceRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
         "Password": fields.Base64(required=False, dump_to="Password"),
+        "ImageId": fields.Str(required=False, dump_to="ImageId"),
+        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
         "ReserveDisk": fields.Str(required=False, dump_to="ReserveDisk"),
         "ResourceType": fields.Int(required=False, dump_to="ResourceType"),
         "DNSServers": fields.List(fields.Str()),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "ImageId": fields.Str(required=False, dump_to="ImageId"),
     }
 
 
@@ -519,92 +608,6 @@ class ReinstallUHostInstanceResponseSchema(schema.ResponseSchema):
     """
 
     fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
-
-
-"""
-API: TerminateCustomImage
-
-删除用户自定义镜像
-"""
-
-
-class TerminateCustomImageRequestSchema(schema.RequestSchema):
-    """ TerminateCustomImage - 删除用户自定义镜像
-    """
-
-    fields = {
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "ImageId": fields.Str(required=True, dump_to="ImageId"),
-    }
-
-
-class TerminateCustomImageResponseSchema(schema.ResponseSchema):
-    """ TerminateCustomImage - 删除用户自定义镜像
-    """
-
-    fields = {"ImageId": fields.Str(required=False, load_from="ImageId")}
-
-
-"""
-API: UpgradeToArkUHostInstance
-
-普通升级为方舟机型
-"""
-
-
-class UpgradeToArkUHostInstanceRequestSchema(schema.RequestSchema):
-    """ UpgradeToArkUHostInstance - 普通升级为方舟机型
-    """
-
-    fields = {
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=True, dump_to="Zone"),
-        "CouponId": fields.Str(required=False, dump_to="CouponId"),
-        "UHostIds": fields.List(fields.Str()),
-    }
-
-
-class UpgradeToArkUHostInstanceResponseSchema(schema.ResponseSchema):
-    """ UpgradeToArkUHostInstance - 普通升级为方舟机型
-    """
-
-    fields = {
-        "UHostSet": fields.List(fields.Str(), required=False, load_from="UHostSet")
-    }
-
-
-"""
-API: GetUHostUpgradePrice
-
-获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
-"""
-
-
-class GetUHostUpgradePriceRequestSchema(schema.RequestSchema):
-    """ GetUHostUpgradePrice - 获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
-    """
-
-    fields = {
-        "TimemachineFeature": fields.Str(required=False, dump_to="TimemachineFeature"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "CPU": fields.Int(required=False, dump_to="CPU"),
-        "Memory": fields.Int(required=False, dump_to="Memory"),
-        "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
-        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
-        "NetCapValue": fields.Int(required=False, dump_to="NetCapValue"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "HostType": fields.Str(required=False, dump_to="HostType"),
-    }
-
-
-class GetUHostUpgradePriceResponseSchema(schema.ResponseSchema):
-    """ GetUHostUpgradePrice - 获取UHost实例升级配置的价格。可选配置范围请参考[[api:uhost-api:uhost_type|云主机机型说明]]。
-    """
-
-    fields = {"Price": fields.Float(required=False, load_from="Price")}
 
 
 """
@@ -619,11 +622,11 @@ class ResetUHostInstancePasswordRequestSchema(schema.RequestSchema):
     """
 
     fields = {
-        "Password": fields.Base64(required=True, dump_to="Password"),
         "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "Password": fields.Base64(required=True, dump_to="Password"),
     }
 
 
@@ -632,6 +635,34 @@ class ResetUHostInstancePasswordResponseSchema(schema.ResponseSchema):
     """
 
     fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
+
+
+"""
+API: ResizeAttachedDisk
+
+修改挂载的磁盘大小，包含系统盘和数据盘
+"""
+
+
+class ResizeAttachedDiskRequestSchema(schema.RequestSchema):
+    """ ResizeAttachedDisk - 修改挂载的磁盘大小，包含系统盘和数据盘
+    """
+
+    fields = {
+        "DiskId": fields.Str(required=True, dump_to="DiskId"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
+        "DiskSpace": fields.Int(required=True, dump_to="DiskSpace"),
+    }
+
+
+class ResizeAttachedDiskResponseSchema(schema.ResponseSchema):
+    """ ResizeAttachedDisk - 修改挂载的磁盘大小，包含系统盘和数据盘
+    """
+
+    fields = {"DiskId": fields.Str(required=False, load_from="DiskId")}
 
 
 """
@@ -648,12 +679,12 @@ class ResizeUHostInstanceRequestSchema(schema.RequestSchema):
     fields = {
         "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
         "CPU": fields.Int(required=False, dump_to="CPU"),
         "DiskSpace": fields.Int(required=False, dump_to="DiskSpace"),
-        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
         "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "UHostId": fields.Str(required=True, dump_to="UHostId"),
         "Memory": fields.Int(required=False, dump_to="Memory"),
+        "BootDiskSpace": fields.Int(required=False, dump_to="BootDiskSpace"),
         "NetCapValue": fields.Int(required=False, dump_to="NetCapValue"),
     }
 
@@ -704,10 +735,10 @@ class StopUHostInstanceRequestSchema(schema.RequestSchema):
     """
 
     fields = {
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
         "UHostId": fields.Str(required=True, dump_to="UHostId"),
         "Region": fields.Str(required=True, dump_to="Region"),
         "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
     }
 
 
@@ -716,6 +747,31 @@ class StopUHostInstanceResponseSchema(schema.ResponseSchema):
     """
 
     fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
+
+
+"""
+API: TerminateCustomImage
+
+删除用户自定义镜像
+"""
+
+
+class TerminateCustomImageRequestSchema(schema.RequestSchema):
+    """ TerminateCustomImage - 删除用户自定义镜像
+    """
+
+    fields = {
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "ImageId": fields.Str(required=True, dump_to="ImageId"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+    }
+
+
+class TerminateCustomImageResponseSchema(schema.ResponseSchema):
+    """ TerminateCustomImage - 删除用户自定义镜像
+    """
+
+    fields = {"ImageId": fields.Str(required=False, load_from="ImageId")}
 
 
 """
@@ -745,90 +801,34 @@ class TerminateUHostInstanceResponseSchema(schema.ResponseSchema):
     """
 
     fields = {
-        "InRecycle": fields.Str(required=True, load_from="InRecycle"),
         "UHostId": fields.Str(required=False, load_from="UHostId"),
+        "InRecycle": fields.Str(required=True, load_from="InRecycle"),
     }
 
 
 """
-API: DescribeUHostTags
+API: UpgradeToArkUHostInstance
 
-获取指定数据中心的业务组列表。
+普通升级为方舟机型
 """
 
 
-class DescribeUHostTagsRequestSchema(schema.RequestSchema):
-    """ DescribeUHostTags - 获取指定数据中心的业务组列表。
+class UpgradeToArkUHostInstanceRequestSchema(schema.RequestSchema):
+    """ UpgradeToArkUHostInstance - 普通升级为方舟机型
     """
 
     fields = {
+        "CouponId": fields.Str(required=False, dump_to="CouponId"),
+        "UHostIds": fields.List(fields.Str()),
         "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "Zone": fields.Str(required=True, dump_to="Zone"),
     }
 
 
-class DescribeUHostTagsResponseSchema(schema.ResponseSchema):
-    """ DescribeUHostTags - 获取指定数据中心的业务组列表。
+class UpgradeToArkUHostInstanceResponseSchema(schema.ResponseSchema):
+    """ UpgradeToArkUHostInstance - 普通升级为方舟机型
     """
 
     fields = {
-        "TotalCount": fields.Int(required=False, load_from="TotalCount"),
-        "TagSet": fields.List(
-            models.UHostTagSetSchema(), required=False, load_from="TagSet"
-        ),
+        "UHostSet": fields.List(fields.Str(), required=False, load_from="UHostSet")
     }
-
-
-"""
-API: ModifyUHostInstanceName
-
-修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
-"""
-
-
-class ModifyUHostInstanceNameRequestSchema(schema.RequestSchema):
-    """ ModifyUHostInstanceName - 修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
-    """
-
-    fields = {
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "Name": fields.Str(required=False, dump_to="Name"),
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-    }
-
-
-class ModifyUHostInstanceNameResponseSchema(schema.ResponseSchema):
-    """ ModifyUHostInstanceName - 修改指定UHost实例名称，需要给出数据中心，UHostId，及新的实例名称。
-    """
-
-    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}
-
-
-"""
-API: ModifyUHostInstanceRemark
-
-修改指定UHost实例备注信息。
-"""
-
-
-class ModifyUHostInstanceRemarkRequestSchema(schema.RequestSchema):
-    """ ModifyUHostInstanceRemark - 修改指定UHost实例备注信息。
-    """
-
-    fields = {
-        "Region": fields.Str(required=True, dump_to="Region"),
-        "Zone": fields.Str(required=False, dump_to="Zone"),
-        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
-        "UHostId": fields.Str(required=True, dump_to="UHostId"),
-        "Remark": fields.Str(required=False, dump_to="Remark"),
-    }
-
-
-class ModifyUHostInstanceRemarkResponseSchema(schema.ResponseSchema):
-    """ ModifyUHostInstanceRemark - 修改指定UHost实例备注信息。
-    """
-
-    fields = {"UhostId": fields.Str(required=False, load_from="UhostId")}

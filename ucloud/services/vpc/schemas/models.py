@@ -20,15 +20,15 @@ class RouteTableInfoSchema(schema.ResponseSchema):
     """
 
     fields = {
-        "RouteTableType": fields.Int(required=False, load_from="RouteTableType"),
-        "Remark": fields.Str(required=False, load_from="Remark"),
-        "CreateTime": fields.Int(required=False, load_from="CreateTime"),
-        "RouteRules": fields.List(RouteRuleInfoSchema()),
-        "RouteTableId": fields.Str(required=False, load_from="RouteTableId"),
         "SubnetCount": fields.Str(required=False, load_from="SubnetCount"),
-        "VPCId": fields.Str(required=False, load_from="VPCId"),
         "VPCName": fields.Str(required=False, load_from="VPCName"),
         "Tag": fields.Str(required=False, load_from="Tag"),
+        "RouteRules": fields.List(RouteRuleInfoSchema()),
+        "RouteTableType": fields.Int(required=False, load_from="RouteTableType"),
+        "VPCId": fields.Str(required=False, load_from="VPCId"),
+        "Remark": fields.Str(required=False, load_from="Remark"),
+        "CreateTime": fields.Int(required=False, load_from="CreateTime"),
+        "RouteTableId": fields.Str(required=False, load_from="RouteTableId"),
     }
 
 
@@ -38,21 +38,21 @@ class SubnetInfoSchema(schema.ResponseSchema):
 
     fields = {
         "OperatorName": fields.Str(required=False, load_from="OperatorName"),
-        "SubnetName": fields.Str(required=False, load_from="SubnetName"),
-        "Tag": fields.Str(required=False, load_from="Tag"),
-        "Subnet": fields.Str(required=False, load_from="Subnet"),
+        "SubnetId": fields.Str(required=False, load_from="SubnetId"),
+        "SubnetType": fields.Int(required=False, load_from="SubnetType"),
+        "Gateway": fields.Str(required=False, load_from="Gateway"),
         "HasNATGW": fields.Bool(required=False, load_from="HasNATGW"),
+        "VPCName": fields.Str(required=False, load_from="VPCName"),
+        "Remark": fields.Str(required=False, load_from="Remark"),
+        "Subnet": fields.Str(required=False, load_from="Subnet"),
+        "Netmask": fields.Int(required=False, load_from="Netmask"),
         "RouteTableId": fields.Str(required=False, load_from="RouteTableId"),
         "Zone": fields.Str(required=False, load_from="Zone"),
-        "Remark": fields.Str(required=False, load_from="Remark"),
-        "SubnetType": fields.Int(required=False, load_from="SubnetType"),
-        "CreateTime": fields.Int(required=False, load_from="CreateTime"),
         "VPCId": fields.Str(required=False, load_from="VPCId"),
-        "SubnetId": fields.Str(required=False, load_from="SubnetId"),
-        "Gateway": fields.Str(required=False, load_from="Gateway"),
+        "Tag": fields.Str(required=False, load_from="Tag"),
         "IPv6Network": fields.Str(required=False, load_from="IPv6Network"),
-        "VPCName": fields.Str(required=False, load_from="VPCName"),
-        "Netmask": fields.Int(required=False, load_from="Netmask"),
+        "SubnetName": fields.Str(required=False, load_from="SubnetName"),
+        "CreateTime": fields.Int(required=False, load_from="CreateTime"),
     }
 
 
@@ -61,14 +61,14 @@ class SubnetResourceSchema(schema.ResponseSchema):
     """
 
     fields = {
+        "SubResourceName": fields.Str(required=False, load_from="SubResourceName"),
+        "SubResourceId": fields.Str(required=False, load_from="SubResourceId"),
+        "SubResourceType": fields.Str(required=False, load_from="SubResourceType"),
         "IP": fields.Str(required=False, load_from="IP"),
         "IPv6Address": fields.Str(required=False, load_from="IPv6Address"),
         "Name": fields.Str(required=False, load_from="Name"),
         "ResourceId": fields.Str(required=False, load_from="ResourceId"),
         "ResourceType": fields.Str(required=False, load_from="ResourceType"),
-        "SubResourceName": fields.Str(required=False, load_from="SubResourceName"),
-        "SubResourceId": fields.Str(required=False, load_from="SubResourceId"),
-        "SubResourceType": fields.Str(required=False, load_from="SubResourceType"),
     }
 
 
@@ -88,15 +88,15 @@ class VPCInfoSchema(schema.ResponseSchema):
 
     fields = {
         "Network": fields.List(fields.Str()),
-        "OperatorName": fields.Str(required=False, load_from="OperatorName"),
-        "Tag": fields.Str(required=True, load_from="Tag"),
-        "Name": fields.Str(required=True, load_from="Name"),
-        "VPCId": fields.Str(required=False, load_from="VPCId"),
-        "UpdateTime": fields.Int(required=True, load_from="UpdateTime"),
         "IPv6Network": fields.Str(required=False, load_from="IPv6Network"),
-        "NetworkInfo": fields.List(VPCNetworkInfoSchema()),
+        "OperatorName": fields.Str(required=False, load_from="OperatorName"),
         "SubnetCount": fields.Int(required=True, load_from="SubnetCount"),
         "CreateTime": fields.Int(required=True, load_from="CreateTime"),
+        "UpdateTime": fields.Int(required=True, load_from="UpdateTime"),
+        "VPCId": fields.Str(required=False, load_from="VPCId"),
+        "NetworkInfo": fields.List(VPCNetworkInfoSchema()),
+        "Tag": fields.Str(required=True, load_from="Tag"),
+        "Name": fields.Str(required=True, load_from="Name"),
     }
 
 
@@ -105,10 +105,10 @@ class VPCIntercomInfoSchema(schema.ResponseSchema):
     """
 
     fields = {
-        "Network": fields.List(fields.Str()),
-        "DstRegion": fields.Str(required=False, load_from="DstRegion"),
         "Name": fields.Str(required=False, load_from="Name"),
         "VPCId": fields.Str(required=False, load_from="VPCId"),
         "Tag": fields.Str(required=False, load_from="Tag"),
         "ProjectId": fields.Str(required=False, load_from="ProjectId"),
+        "Network": fields.List(fields.Str()),
+        "DstRegion": fields.Str(required=False, load_from="DstRegion"),
     }
