@@ -141,8 +141,12 @@ class Scenario:
         return deco
 
     def run(self, client):
-        for step in self.steps:
+        for i, step in enumerate(self.steps):
             try:
+                action = step.extras.get('action', 'unknown')
+                client.logger.info(
+                    'running {} step {} {}'.format(self.id, i, action)
+                )
                 step.run(client, self.variables)
             except CompareError as e:
                 self.errors.append(e)
@@ -180,16 +184,16 @@ def value_at_path(d: dict, path: str):
                 return
 
             if len(result) <= int(key):
-                msg = "{} not found".format(".".join(indices[:i]))
+                msg = "{} not found".format(".".join(indices[:i+1]))
                 raise ValueNotFoundError(msg)
 
             result = result[int(key)]
             continue
 
         if isinstance(result, dict):
-            result = result.get(key)
+            result = {k.lower(): v for k, v in result.items()}.get(key.lower())
             if result is None:
-                msg = "{} not found".format(".".join(indices[:i]))
+                msg = "{} not found".format(".".join(indices[:i+1]))
                 raise ValueNotFoundError(msg)
             continue
 
