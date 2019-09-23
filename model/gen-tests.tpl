@@ -5,7 +5,7 @@
 {{ range $index, $test := .GetAll }}
 ucloud-model sdk test \
     --lang python3 \
-    --template ../ucloud-api-model-v2/apisdk/lang/python/templates/testing.tpl \
+    --template ${U_MODEL_HOME}/providers/python/templates/testing.tpl \
     --output tests/test_services/test_set_{{ $test.ID }}.py \
     --name {{ $test.ID }}
 {{ end }}
