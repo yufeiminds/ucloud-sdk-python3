@@ -794,6 +794,38 @@ class DescribeUDBInstanceBinlogBackupStateResponseSchema(schema.ResponseSchema):
 
 
 """
+API: DescribeUDBInstanceLog
+
+查询某一段时间内UDB的错误日志或慢查询日志
+"""
+
+
+class DescribeUDBInstanceLogRequestSchema(schema.RequestSchema):
+    """ DescribeUDBInstanceLog - 查询某一段时间内UDB的错误日志或慢查询日志
+    """
+
+    fields = {
+        "BeginTime": fields.Int(required=True, dump_to="BeginTime"),
+        "DBId": fields.Str(required=True, dump_to="DBId"),
+        "EndTime": fields.Int(required=True, dump_to="EndTime"),
+        "LogType": fields.Str(required=True, dump_to="LogType"),
+        "ProjectId": fields.Str(required=False, dump_to="ProjectId"),
+        "Region": fields.Str(required=True, dump_to="Region"),
+        "Zone": fields.Str(required=False, dump_to="Zone"),
+    }
+
+
+class DescribeUDBInstanceLogResponseSchema(schema.ResponseSchema):
+    """ DescribeUDBInstanceLog - 查询某一段时间内UDB的错误日志或慢查询日志
+    """
+
+    fields = {
+        "Log": fields.Str(required=False, load_from="Log"),
+        "NextTime": fields.Str(required=False, load_from="NextTime"),
+    }
+
+
+"""
 API: DescribeUDBInstancePrice
 
 获取UDB实例价格信息

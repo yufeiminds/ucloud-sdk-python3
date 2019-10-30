@@ -865,6 +865,35 @@ class UDBClient(Client):
             resp
         )
 
+    def describe_udb_instance_log(
+        self, req: typing.Optional[dict] = None, **kwargs
+    ) -> dict:
+        """ DescribeUDBInstanceLog - 查询某一段时间内UDB的错误日志或慢查询日志
+
+        **Request**
+
+        - **ProjectId** (str) - (Config) 项目ID。不填写为默认项目，子帐号必须填写。 请参考 `GetProjectList接口 <https://docs.ucloud.cn/api/summary/get_project_list.html>`_ 
+        - **Region** (str) - (Config) 地域。 参见  `地域和可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_ 
+        - **BeginTime** (int) - (Required) 查询的日志开始的时间戳（Unix Timestamp）。对于实时查询，这个参数应该是上次轮询请求时的时间戳，后台会返回从该值到当前时间的日志内容。
+        - **DBId** (str) - (Required) 实例ID
+        - **EndTime** (int) - (Required) 查询日志的结束时间戳(Unix Timestamp），对于实时查询不传该值，与BeginTime的差值不超过24小时：(EndTime-BeginTime) < 24*60*60
+        - **LogType** (str) - (Required) 查询日志的类型
+        - **Zone** (str) - 可用区。参见  `可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_ 
+        
+        **Response**
+
+        - **Log** (str) - 查询到的日志内容，一段纯文本
+        - **NextTime** (str) - 此次查询到的日志的下一个时间，用于下一次轮询时的BeginTime参数；如果日志查询结束则返回为空，前端结束查询
+        
+        """
+        # build request
+        d = {"ProjectId": self.config.project_id, "Region": self.config.region}
+        req and d.update(req)
+        d = apis.DescribeUDBInstanceLogRequestSchema().dumps(d)
+
+        resp = self.invoke("DescribeUDBInstanceLog", d, **kwargs)
+        return apis.DescribeUDBInstanceLogResponseSchema().loads(resp)
+
     def describe_udb_instance_price(
         self, req: typing.Optional[dict] = None, **kwargs
     ) -> dict:
@@ -1094,7 +1123,7 @@ class UDBClient(Client):
 
         - **Region** (str) - (Config) 地域。 参见  `地域和可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_ 
         - **Zone** (str) - (Required) 可用区。参见  `可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_ 
-        - **BackupZone** (str) - 跨可用区高可用DB的备库所在区域，仅当该可用区支持跨可用区高可用时填入。参见  `可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_ 
+        - **BackupZone** (str) - 跨可用区高可用DB的备库所在区域，仅当该可用区支持跨可用区高可用时填入。参见  `可用区列表 <https://docs.ucloud.cn/api/summary/regionlist.html>`_
         - **DBClusterType** (str) - DB实例类型，如mysql，sqlserver，mongo，postgresql
         - **DiskType** (str) - 返回支持某种磁盘类型的DB类型。如果没传，则表示任何磁盘类型均可。
         - **InstanceMode** (str) - 返回支持某种实例类型的DB类型。如果没传，则表示任何实例类型均可。normal:单点,ha:高可用,sharded_cluster:分片集群
@@ -1104,7 +1133,7 @@ class UDBClient(Client):
         - **Action** (str) - 操作名称
         - **DataSet** (list) - 见 **UDBTypeSet** 模型定义
         - **RetCode** (int) - 返回码
-        
+
         **Response Model**
         
         **UDBTypeSet** 
@@ -1390,7 +1419,7 @@ class UDBClient(Client):
         - **ChargeType** (str) - Year， Month， Dynamic，Trial，不填则按现在单点计费执行
         - **Quantity** (str) - 购买时长，需要和 ChargeType 搭配使用，否则使用单点计费策略的值
         - **Tag** (str) - 业务组
-        
+
         **Response**
 
         - **DBId** (str) - 切换后高可用db实例的Id
